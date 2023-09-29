@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt&display=swap");
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+@import "iconstyles.css";
+@import "loading.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  * {
+    font-family: Prompt;
+  }
+}
+.slick-next {
+  display: none !important;
+}
