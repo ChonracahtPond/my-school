@@ -20,22 +20,22 @@ const ComponentsNavbar: React.FC = () => {
 
 
   return (
-    <nav className="bg-[#1F306A] sm/h-[130px] font-fontTH ">
+    <nav className="bg-[#371f6a] sm/h-[130px] font-fontTH ">
       <div className="flex justify-around gap-5 mx-auto px-2 sm:px-6 lg:px-8 py-3 flex-wrap  h-[100%] drop-shadow-lg" >
         <div className="grid grid-flow-col items-center gap-5" >
           <div >
             <Link href='/' className="flex items-center gap-2">
               <Image
-                src="/img/Logo_panomwan.png"
+                src="/img/logoschool.png"
                 width={100}
                 height={100}
                 className="w-[65px] md:w-[90px]" alt="" />
 
 
               <div className="text-white">
-                <p className="text-sm md:text-lg ">วิทยาลัยเทคโนโลยีพนมวันท์</p>
+                <p className="text-sm md:text-lg ">ศูนย์ส่งเสริมการเรียนรู้อำเภอเมืองอุดรธานี</p>
                 <div className=" bg-white h-[2px] sm/w-[300px]" />
-                <p className="text-[10px] mt-0.5 md:text-sm" >Phanomwan College of Technology</p>
+                <p className="text-[10px] mt-0.5 md:text-sm" >Udonthani City Learning Promotion Center.</p>
               </div>
             </Link>
           </div>
@@ -56,14 +56,9 @@ const ComponentsNavbar: React.FC = () => {
             href="/"
             className="text-white  px-3 py-2 rounded-md  font-medium"
           >
-            หน้าแรก
-          </Link>
-          <Link
-            href="/register/form"
-            className="text-black bg-amber-400 hover:bg-white hover:text-[#1F306A] px-3 py-2 rounded-md  font-medium"
-          >
             สมัครเรียน
           </Link>
+        
         </ul>
       </div>
 
@@ -75,17 +70,11 @@ const ComponentsNavbar: React.FC = () => {
         <ul className="mt-1.5 text-center ">
             <Link href="/">
             <button className="w-full bg-slate-100 hover:bg-white px-4 py-1.5 rounded-md  ">
-              <p className="text-black hover:text-[#1F306A]">หน้าแรก</p>
-              </button>
-            </Link>
-        </ul>
-        <ul className="mt-1.5 text-center ">
-            <Link href="/register/form">
-            <button className="w-full bg-amber-400 hover:bg-white px-4 py-1.5 rounded-md  ">
               <p className="text-black hover:text-[#1F306A]">สมัครเรียน</p>
               </button>
             </Link>
         </ul>
+        
       </div>
 
     </nav>
