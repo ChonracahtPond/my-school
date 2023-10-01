@@ -12,28 +12,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const page: number = Number(req.query.page) || 1;
                 const pageSize: number = Number(req.query.pageSize) || 10;
 
-                const sliderSchool = await prisma.sliderSchool.findMany({
+                const regfrom = await prisma.regfrom.findMany({
                     skip: (page - 1) * pageSize,
                     take: pageSize,
                 });
 
-                const totalsliderSchool = await prisma.sliderSchool.count();
-                const totalPage: number = Math.ceil(totalsliderSchool / pageSize);
-                res.status(200).json({ sliderSchool });
+                const totalregfrom = await prisma.regfrom.count();
+                const totalPage: number = Math.ceil(totalregfrom / pageSize);
+                res.status(200).json({ regfrom });
             } catch (error) {
-                res.status(500).json({ error: "An error occurred while fetching the sliderSchool" });
+                res.status(500).json({ error: "An error occurred while fetching the regfrom" });
             }
             break;
 
         case 'POST':
             try {
-                const newsliderSchool = await prisma.sliderSchool.create({
+                const newregfrom = await prisma.regfrom.create({
                     data: req.body,
                 });
 
-                res.status(201).json(newsliderSchool);
+                res.status(201).json(newregfrom);
             } catch (error) {
-                res.status(500).json({ error: "An error occurred while creating the sliderSchool" });
+                res.status(500).json({ error: "An error occurred while creating the regfrom" });
             }
             break;
 

@@ -1,41 +1,61 @@
 
-import { Inter } from 'next/font/google'
-import React, { useRef, useState, useEffect } from "react";
+import useAxios from 'axios-hooks';
+import { Inter } from 'next/font/google';
+import React, { useRef, useState, useEffect, ChangeEvent } from "react";
+
+
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
-  const [{ error: errorMessage, loading: IndexActivityLoading }, executeIndexActivity] = useAxios({ url: '/api/registerForm', method: 'POST' }, { manual: true });
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [id, setId] = useState<string>("")
+export default function Regfrom() {
 
-  const [regIdpersonal, setRegIdpersonal] = useState<string>(""); // Example for an input field
-  const [regBirth, setRegBirth] = useState<string>("");
-  const [regPrefix, setRegPrefix] = useState<string>("");
+  const [{ error: errorMessage, loading: IndexActivityLoading }, executeIndexActivity] = useAxios(
+    { url: '/api/regform', method: 'POST' },
+    { manual: true }
+  )
 
 
-  const [regSex, setRegSex] = useState<string>("");
-  const [regNation, setRegNation] = useState<string>("");
-  const [regName, setRegName] = useState<string>("");
-  const [regLastname, setRegLastname] = useState<string>("");
-  const [regEname, setRegEname] = useState<string>("");
-  const [regElastname, setRegElastname] = useState<string>("");
-  const [regPhone, setRegPhone] = useState<string>("");
-  const [regEmail, setRegEmail] = useState<string>("");
-
-
-  const [regSchool, setRegSchool] = useState<string>("");
-  const [regDegree, setRegDegree] = useState<string>("");
-  const [regGpa, setRegGpa] = useState<string>("");
-  const [regProgram, setRegProgram] = useState<string>("");
-
-  const [regFaculty, setRegFaculty] = useState<string>("");
-  const [regMajor, setRegMajor] = useState<string>("");
-
-  const [success, setSuccess] = useState(false);
-  const [dataOut, setDataOut] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [educationOffice, seteducationOffice] = useState<string>("");
+  const [fname, setfname] = useState<string>("");
+  const [lname, setlname] = useState<string>("");
+  const [birthday, setbirthday] = useState<string>("");
+  const [age, setage] = useState<string>("");
+  const [idcard, setidcard] = useState<string>("");
+  const [religion, setreligion] = useState<string>("");
+  const [nationality, setnationality] = useState<string>("");
+  const [occupation, setoccupation] = useState<string>("");
+  const [avgincome, setavgincome] = useState<string>("");
+  const [fathersname, setfathersname] = useState<string>("");
+  const [fanationality, setfanationality] = useState<string>("");
+  const [faavgincome, setfaavgincome] = useState<string>("");
+  const [mothersname, setmothersname] = useState<string>("");
+  const [monationality, setmonationality] = useState<string>("");
+  const [moavgincome, setmoavgincome] = useState<string>("");
+  const [endclass, setendclass] = useState<string>("");
+  const [endyear, setendyear] = useState<string>("");
+  const [schoolend, setschoolend] = useState<string>("");
+  const [enddistrict, setenddistrict] = useState<string>("");
+  const [endprovince, setendprovince] = useState<string>("");
+  const [dhamma, setdhamma] = useState<string>("");
+  const [endyeardhamma, setendyeardhamma] = useState<string>("");
+  const [endschooldhamma, setendschooldhamma] = useState<string>("");
+  const [enddistrictdhamma, setenddistrictdhamma] = useState<string>("");
+  const [endprovincedhamma, setendprovincedhamma] = useState<string>("");
+  const [address, setaddress] = useState<string>("");
+  const [group, setgroup] = useState<string>("");
+  const [alley, setalley] = useState<string>("");
+  const [road, setroad] = useState<string>("");
+  const [subdistrict, setsubdistrict] = useState<string>("");
+  const [district, setdistrict] = useState<string>("");
+  const [province, setprovince] = useState<string>("");
+  const [zipcode, setzipcode] = useState<string>("");
+  const [tel, settel] = useState<string>("");
+  const [imgprifile, setimgprifile] = useState<string>("");
+  const [imgqualification, setimgqualification] = useState<string>("");
+  const [imghouseregistration, setimghouseregistration] = useState<string>("");
+  const [imgidcard, setimgidcard] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [isMissingModalOpen, setIsMissingModalOpen] = useState(false);
@@ -55,7 +75,7 @@ export default function Home() {
       // || !enddistrict || !endprovince || !dhamma
       // || !endyeardhamma || !endschooldhamma || !enddistrictdhamma || !endprovincedhamma || !address
       // || !group || !alley || !road || !subdistrict || !district || !province || !zipcode || !tel || 
-      !imgprifile  || !imghouseregistration || !imgidcard || !imgqualification 
+      !imgprifile || !imghouseregistration || !imgidcard || !imgqualification
     ) {
 
       // ถ้าข้อมูลไม่ครบถ้วน ให้แสดง modal แจ้งเตือน
@@ -71,7 +91,7 @@ export default function Home() {
           educationOffice, fname, lname, birthday, idcard, religion, nationality, occupation, avgincome, fathersname, fanationality,
           faavgincome, mothersname, monationality, moavgincome, endclass, endyear, schoolend, enddistrict, endprovince, dhamma, endyeardhamma,
           endschooldhamma, enddistrictdhamma, endprovincedhamma, address, group, alley, road, subdistrict, district, province,
-          zipcode, tel, imgprifile,imgqualification, imghouseregistration, imgidcard
+          zipcode, tel, imgprifile, imgqualification, imghouseregistration, imgidcard
           // เพิ่มข้อมูลอื่น ๆ ตามที่ต้องการ
         },
       });
@@ -117,8 +137,9 @@ export default function Home() {
     }
     const file = files[0];
     // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
-    if (!file.type.startsWith('image/')) {
-      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'application/pdf']; // เพิ่มประเภทไฟล์ที่อนุญาต
+    if (!allowedFileTypes.includes(file.type)) {
+      alert('กรุณาเลือกไฟล์รูปภาพ (PNG, JPEG) หรือ PDF เท่านั้น');
       return;
     }
     // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
@@ -127,7 +148,7 @@ export default function Home() {
       const base64Image = event.target?.result as string;
       setimgprifile(base64Image); // เก็บข้อมูลรูปภาพเป็น Base64
     };
-    
+
     reader.readAsDataURL(file);
   };
   const handleImageUploadimgidcard = (files: FileList | null) => {
@@ -136,8 +157,9 @@ export default function Home() {
     }
     const file = files[0];
     // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
-    if (!file.type.startsWith('image/')) {
-      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'application/pdf']; // เพิ่มประเภทไฟล์ที่อนุญาต
+    if (!allowedFileTypes.includes(file.type)) {
+      alert('กรุณาเลือกไฟล์รูปภาพ (PNG, JPEG) หรือ PDF เท่านั้น');
       return;
     }
     // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
@@ -154,8 +176,9 @@ export default function Home() {
     }
     const file = files[0];
     // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
-    if (!file.type.startsWith('image/')) {
-      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'application/pdf']; // เพิ่มประเภทไฟล์ที่อนุญาต
+    if (!allowedFileTypes.includes(file.type)) {
+      alert('กรุณาเลือกไฟล์รูปภาพ (PNG, JPEG) หรือ PDF เท่านั้น');
       return;
     }
     // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
@@ -166,14 +189,15 @@ export default function Home() {
     };
     reader.readAsDataURL(file);
   };
-  const Uploadimgimgqualification = (files: FileList | null) => {
+  const handleImageUploadimgquali = (files: FileList | null) => {
     if (!files || files.length === 0) {
       return;
     }
     const file = files[0];
     // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
-    if (!file.type.startsWith('image/')) {
-      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'application/pdf']; // เพิ่มประเภทไฟล์ที่อนุญาต
+    if (!allowedFileTypes.includes(file.type)) {
+      alert('กรุณาเลือกไฟล์รูปภาพ (PNG, JPEG) หรือ PDF เท่านั้น');
       return;
     }
     // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
@@ -184,279 +208,290 @@ export default function Home() {
     };
     reader.readAsDataURL(file);
   };
-  
+
 
 
   return (
-    <RootLayout>
-      {/* <div className=' text-xl'>
-        ข้อมูลผู้สมัครเรียน
-      </div> */}
+    <>
+
       <section className="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 my-20">
         <h1 className="font-bold text-white capitalize dark:text-white text-2xl">ข้อมูลผู้สมัครเรียน</h1>
-        <form>
-        <div className=' mt-5'>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">กศร.ตำบล</label>
-            <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+        <form >
+          <div className=' mt-5'>
+            <label className="text-white dark:text-gray-200" htmlFor="educationOffice">กศร.ตำบล</label>
+            <select
+              id="educationOffice"
+              value={educationOffice}
+              onChange={(e) => seteducationOffice(e.target.value)}
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
               <option>โปรดเลือกตำบล</option>
-              <option>หมากแข้ง</option>
-              <option>นิคมสงเคราะห์</option>
-              <option>บ้านขาว</option>
-              <option>หนองบัว</option>
-              <option>บ้านตาด</option>
-              <option>โนนสูง</option>
-              <option>หมูม่น</option>
-              <option>เชียงยืน</option>
-              <option>หนองนาคำ</option>
-              <option>กุดสระ</option>
-              <option>บ้านเลื่อม</option>
-              <option>นาดี</option>
-              <option>เชียงพิณ</option>
-              <option>สามพร้าว</option>
-              <option>หนองไฮ</option>
-              <option>นาข่า</option>
-              <option>บ้านจั่น</option>
-              <option>หนองขอนกว้าง</option>
-              <option>โคกสะอาด</option>
-              <option>นากว้าง</option>
-              <option>หนองไผ่</option>
+              <option value="หมากแข้ง" id="หมากแข้ง">หมากแข้ง</option>
+              <option value="นิคมสงเคราะห์" id="นิคมสงเคราะห์">นิคมสงเคราะห์</option>
+              <option value="บ้านขาว" id="บ้านขาว">บ้านขาว</option>
+              <option value="หนองบัว" id="หนองบัว">หนองบัว</option>
+              <option value="บ้านตาด" id="บ้านตาด">บ้านตาด</option>
+              <option value="โนนสูง" id="โนนสูง">โนนสูง</option>
+              <option value="หมูม่น" id="หมูม่น">หมูม่น</option>
+              <option value="เชียงยืน" id="เชียงยืน">เชียงยืน</option>
+              <option value="หนองนาคำ" id="หนองนาคำ">หนองนาคำ</option>
+              <option value="กุดสระ" id="กุดสระ">กุดสระ</option>
+              <option value="บ้านเลื่อม" id="บ้านเลื่อม">บ้านเลื่อม</option>
+              <option value="นาดี" id="นาดี">นาดี</option>
+              <option value="เชียงพิณ" id="เชียงพิณ">เชียงพิณ</option>
+              <option value="สามพร้าว" id="สามพร้าว">สามพร้าว</option>
+              <option value="หนองไฮ" id="หนองไฮ">หนองไฮ</option>
+              <option value="นาข่า" id="นาข่า">นาข่า</option>
+              <option value="บ้านจั่น" id="บ้านจั่น">บ้านจั่น</option>
+              <option value="หนองขอนกว้าง" id="หนองขอนกว้าง">หนองขอนกว้าง</option>
+              <option value="โคกสะอาด" id="โคกสะอาด">โคกสะอาด</option>
+              <option value="นากว้าง" id="นากว้าง">นากว้าง</option>
+              <option value="หนองไผ่" id="หนองไผ่">หนองไผ่</option>
             </select>
           </div>
-          {/* <div className='mt-5'>
-            <label className="text-white dark:text-gray-200" htmlFor="data">กศร.ตำบล</label>
-            <input id="username" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-          </div> */}
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
             <div>
               <label className="text-white dark:text-gray-200" htmlFor="fname">ชื่อ</label>
-              <input id="fname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <input id="fname" value={fname} onChange={(e) => setfname(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
               <label className="text-white dark:text-gray-200" htmlFor="lname">นามสกุล</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <input id="lname" value={lname} onChange={(e) => setlname(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">วัน/เดือน/ปี เกิด</label>
-              <input id="date" type="date" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="birthday">วัน/เดือน/ปี เกิด</label>
+              <input id="date" value={birthday} onChange={(e) => setbirthday(e.target.value)} type="date" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
 
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="password">เลขประจำตัวประชาชน</label>
-              <input id="password" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="idcard">เลขประจำตัวประชาชน</label>
+              <input id="idcard" value={idcard} onChange={(e) => setidcard(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
-            </div>
+          </div>
+          <div className='my-5 '>
+            <label className="text-white dark:text-gray-200" htmlFor="image">กรุณาอัพโหลดรูปภาพ บัตรประชาชน</label>
+            <input id="image" type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUploadimgidcard(e.target.files)} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+          </div>
 
-            <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-4">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">ศาสนา</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-            </div>
-            <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">สัญชาติ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="religion">ศาสนา</label>
+              <input id="religion" value={religion} onChange={(e) => setreligion(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">อาชีพ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="nationality">สัญชาติ</label>
+              <input id="nationality" value={nationality} onChange={(e) => setnationality(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">รายได้เฉลี่ยต่อปี</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="occupation">อาชีพ</label>
+              <input id="occupation" value={occupation} onChange={(e) => setoccupation(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
+            <div>
+              <label className="text-white dark:text-gray-200" htmlFor="avgincome">รายได้เฉลี่ยต่อปี</label>
+              <input id="avgincome" value={avgincome} onChange={(e) => setavgincome(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
-          
+          </div>
+          <div className='my-5 '>
+            <label className="text-white dark:text-gray-200" htmlFor="image">กรุณาอัพโหลดรูปภาพ 1.5 นิ้ว</label>
+            <input id="image" type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUpload(e.target.files)} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+          </div>
+
+
+
+
           {/* ชื่อพ่อ */}
           <div className=' mt-5'>
-            <label className="text-white dark:text-gray-200" htmlFor="lname">ชื่อ-นามสกุล บิดา</label>
-            <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+            <label className="text-white dark:text-gray-200" htmlFor="fathersname">ชื่อ-นามสกุล บิดา</label>
+            <input id="fathersname" value={fathersname} onChange={(e) => setfathersname(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
           </div>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">สัญชาติ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="fanationality">สัญชาติ</label>
+              <input id="fanationality" value={fanationality} onChange={(e) => setfanationality(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">อาชีพ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="faavgincome">อาชีพ</label>
+              <input id="faavgincome" value={faavgincome} onChange={(e) => setfaavgincome(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
 
           {/* ชื่อแม่ */}
           <div className=' mt-5'>
-            <label className="text-white dark:text-gray-200" htmlFor="lname">ชื่อ-นามสกุล มารดา</label>
-            <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+            <label className="text-white dark:text-gray-200" htmlFor="mothersname">ชื่อ-นามสกุล มารดา</label>
+            <input id="mothersname" value={mothersname} onChange={(e) => setmothersname(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
           </div>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">สัญชาติ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="monationality">สัญชาติ</label>
+              <input id="monationality" value={monationality} onChange={(e) => setmonationality(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">อาชีพ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="moavgincome">อาชีพ</label>
+              <input id="moavgincome" value={moavgincome} onChange={(e) => setmoavgincome(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
 
 
-          <h1 className="mt-10 font-bold text-white capitalize dark:text-white text-2xl">ประวัติการศึกษาเดิม (จบชั้น)</h1>
+          <h1 className="mt-10 font-bold text-white capitalize dark:text-white text-2xl ">ประวัติการศึกษาเดิม (จบชั้น)</h1>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">จบชั้น</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="endclass">จบชั้น</label>
+              <input id="endclass" value={endclass} onChange={(e) => setendclass(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">ปี พ.ศ. ที่จบ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="endyear">ปี พ.ศ. ที่จบ</label>
+              <input id="endyear" value={endyear} onChange={(e) => setendyear(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">จากสถานศึกษา</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="schoolend">จากสถานศึกษา</label>
+              <input id="schoolend" value={schoolend} onChange={(e) => setschoolend(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">อำเภอ/เขต</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="enddistrict">อำเภอ/เขต</label>
+              <input id="enddistrict" value={enddistrict} onChange={(e) => setenddistrict(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">จังหวัด</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="endprovince">จังหวัด</label>
+              <input id="endprovince" value={endprovince} onChange={(e) => setendprovince(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
+          </div>
+          <div className='my-5 '>
+            <label className="text-white dark:text-gray-200" htmlFor="image">กรุณาอัพโหลดรูปภาพ วุฒิเดิม</label>
+            <input id="image" type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUploadimgquali(e.target.files)} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
           </div>
 
           {/* วุฒทางธรรม */}
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">วุฒิทางธรรม (ถ้ามี)</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="dhamma">วุฒิทางธรรม (ถ้ามี)</label>
+              <input id="dhamma" value={dhamma} onChange={(e) => setdhamma(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">ปี พ.ศ. ที่จบ</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="endyeardhamma">ปี พ.ศ. ที่จบ</label>
+              <input id="endyeardhamma" value={endyeardhamma} onChange={(e) => setendyeardhamma(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">จากสถานศึกษา</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="endschooldhamma">จากสถานศึกษา</label>
+              <input id="endschooldhamma" value={endschooldhamma} onChange={(e) => setendschooldhamma(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">อำเภอ/เขต</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="enddistrictdhamma">อำเภอ/เขต</label>
+              <input id="enddistrictdhamma" value={enddistrictdhamma} onChange={(e) => setenddistrictdhamma(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">จังหวัด</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="endprovincedhamma">จังหวัด</label>
+              <input id="endprovincedhamma" value={endprovincedhamma} onChange={(e) => setendprovincedhamma(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
 
           <h1 className="mt-10 font-bold text-white capitalize dark:text-white text-2xl">ที่อยู่ปัจจุบัน (สามารถติดต่อได้สะดวก) </h1>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-4 ">
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">บ้านเลขที่</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="address">บ้านเลขที่</label>
+              <input id="address" value={address} onChange={(e) => setaddress(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">หมู่</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="group">หมู่</label>
+              <input id="group" value={group} onChange={(e) => setgroup(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">ซอย</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="alley">ซอย</label>
+              <input id="alley" value={alley} onChange={(e) => setalley(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">ถนน</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="road">ถนน</label>
+              <input id="road" value={road} onChange={(e) => setroad(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-3 ">
-          <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">ตำบล/แขวง</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+            <div>
+              <label className="text-white dark:text-gray-200" htmlFor="subdistrict">ตำบล/แขวง</label>
+              <input id="subdistrict" value={subdistrict} onChange={(e) => setsubdistrict(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">อำเภอ/เขต</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="district">อำเภอ/เขต</label>
+              <input id="district" value={district} onChange={(e) => setdistrict(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">จังหวัด</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="province">จังหวัด</label>
+              <input id="province" value={province} onChange={(e) => setprovince(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 ">
-          
+
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">รหัสไปรษณีย์</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="zipcode">รหัสไปรษณีย์</label>
+              <input id="zipcode" value={zipcode} onChange={(e) => setzipcode(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
-          
+
             <div>
-              <label className="text-white dark:text-gray-200" htmlFor="lname">โทรศัพท์ (มือถือ)</label>
-              <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+              <label className="text-white dark:text-gray-200" htmlFor="tel">โทรศัพท์ (มือถือ)</label>
+              <input id="tel" value={tel} onChange={(e) => settel(e.target.value)} type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
           </div>
 
+          <div className='my-5 '>
+            <label className="text-white dark:text-gray-200" htmlFor="image">กรุณาอัพโหลดรูปภาพ ทะเบียนบ้าน</label>
+            <input id="image" type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUploadimghouse(e.target.files)} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
+          </div>
 
-          {/* <div>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Password Confirmation</label>
-            <input id="passwordConfirmation" type="password" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-          </div>
-          <div>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Color</label>
-            <input id="color" type="color" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-          </div>
-          <div>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Select</label>
-            <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-              <option>Surabaya</option>
-              <option>Jakarta</option>
-              <option>Tangerang</option>
-              <option>Bandung</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Range</label>
-            <input id="range" type="range" className="block w-full py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-          </div>
-          <div>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Date</label>
-            <input id="date" type="date" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-          </div>
-          <div>
-            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Text Area</label>
-            <textarea id="textarea" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-white">
-              Image
-            </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div className="space-y-1 text-center">
-                <svg className="mx-auto h-12 w-12 text-white" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <div className="flex text-sm text-gray-600">
-                  <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                    <span className="">Upload a file</span>
-                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                  </label>
-                  <p className="pl-1 text-white">or drag and drop</p>
-                </div>
-                <p className="text-xs text-white">
-                  PNG, JPG, GIF up to 10MB
-                </p>
-              </div>
-            </div>
-          </div> */}
 
           <div className="flex justify-end mt-6">
-            <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600">Save</button>
+            <button type="submit"
+              disabled={isLoading}
+              onClick={handleSubmit} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-500 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-gray-600">Save</button>
           </div>
+          {isMissingModalOpen && (
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-75">
+              <div className="bg-white p-6 rounded-lg text-center">
+                <p className="text-red-500 text-lg mb-4">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+                <button
+                  onClick={() => setIsMissingModalOpen(false)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md focus:outline-none"
+                >
+                  ปิด
+                </button>
+              </div>
+            </div>
+          )}
+          {isModalOpen && (
+            <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">
+              <div className="bg-white p-6 rounded-lg mx-auto">
+                <p className="text-2xl font-semibold mb-4">ยืนยันการสมัคร</p>
+                <p>คุณต้องการจองคิวหรือไม่?</p>
+                <div className="mt-4 flex justify-end">
+                  <button
+                    onClick={handleCloseModal} // เรียกใช้งานเมื่อกดปุ่ม "ยกเลิก"
+                    className="px-4 py-2 bg-red-500 text-white rounded-md mr-2"
+                  >
+                    ยกเลิก
+                  </button>
+                  <button
+                    onClick={handleConfirm} // เรียกใช้งานเมื่อกดปุ่ม "ยืนยัน"
+                    className="px-4 py-2 bg-green-500 text-white rounded-md"
+                  >
+                    ยืนยัน
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
         </form>
       </section>
 
-      
 
-    </RootLayout>
+    </>
   )
 }
