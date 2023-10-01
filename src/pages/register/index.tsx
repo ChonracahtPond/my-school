@@ -1,15 +1,6 @@
 
 import { Inter } from 'next/font/google'
-import RootLayout from '@/components/layout'
 import React, { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
-import useAxios from "axios-hooks";
-import Modal from "./modal";
-import Loading from './loading';
-import Missing from './modalmissing';
-import Link from 'next/link'
-import Success from './modalsuccess';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,7 +25,6 @@ export default function Home() {
   const [regPhone, setRegPhone] = useState<string>("");
   const [regEmail, setRegEmail] = useState<string>("");
 
-  const [regImg, setRegImg] = useState<File | null>(null);
 
   const [regSchool, setRegSchool] = useState<string>("");
   const [regDegree, setRegDegree] = useState<string>("");
@@ -51,6 +41,150 @@ export default function Home() {
   const [isMissingModalOpen, setIsMissingModalOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [missingFields, setMissingFields] = useState<string[]>([]);
+
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    // ตรวจสอบว่าข้อมูลถูกกรอกครบถ้วน
+    if (
+      // !educationOffice
+      // || !fname || !lname || !birthday || !idcard || !religion || !nationality
+      // || !occupation || !avgincome || !fathersname || !fanationality || !faavgincome || !mothersname || !monationality
+      // || !moavgincome || !endclass || !endyear || !schoolend
+      // || !enddistrict || !endprovince || !dhamma
+      // || !endyeardhamma || !endschooldhamma || !enddistrictdhamma || !endprovincedhamma || !address
+      // || !group || !alley || !road || !subdistrict || !district || !province || !zipcode || !tel || 
+      !imgprifile  || !imghouseregistration || !imgidcard || !imgqualification 
+    ) {
+
+      // ถ้าข้อมูลไม่ครบถ้วน ให้แสดง modal แจ้งเตือน
+      setIsMissingModalOpen(true);
+      return;
+    }
+
+    // ส่งข้อมูลไปยัง API
+    try {
+      setIsLoading(true);
+      const response = await executeIndexActivity({
+        data: {
+          educationOffice, fname, lname, birthday, idcard, religion, nationality, occupation, avgincome, fathersname, fanationality,
+          faavgincome, mothersname, monationality, moavgincome, endclass, endyear, schoolend, enddistrict, endprovince, dhamma, endyeardhamma,
+          endschooldhamma, enddistrictdhamma, endprovincedhamma, address, group, alley, road, subdistrict, district, province,
+          zipcode, tel, imgprifile,imgqualification, imghouseregistration, imgidcard
+          // เพิ่มข้อมูลอื่น ๆ ตามที่ต้องการ
+        },
+      });
+      // ประมวลผลเมื่อสำเร็จ
+      setIsLoading(false);
+      setIsSuccess(true);
+      setMessage("สำเร็จ! คุณได้ทำการจองคิวเรียบร้อยแล้ว");
+
+      // setIsDataSent(true); 
+      // สร้าง state isDataSent และตั้งค่าเป็น true
+      setIsModalOpen(true);
+    } catch (error) {
+      // ประมวลผลเมื่อเกิดข้อผิดพลาด
+      setIsLoading(false);
+      setIsSuccess(false);
+      setMessage("เกิดข้อผิดพลาดในการจองคิว");
+    }
+  };
+
+  // เรียกใช้งานฟังก์ชันเมื่อกดปุ่ม "จองคิว"
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // เรียกใช้งานฟังก์ชันเมื่อกดปุ่ม "ยกเลิก"
+  const handleCloseModal = () => {
+
+    window.location.reload();
+    setIsModalOpen(false);
+  };
+  const handleConfirm = () => {
+
+    window.location.reload();
+    // ทำสิ่งที่คุณต้องการเมื่อยืนยัน
+    // ตัวอย่าง: ปิด Modal
+    setIsModalOpen(false);
+
+  };
+
+  const handleImageUpload = (files: FileList | null) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const file = files[0];
+    // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
+    if (!file.type.startsWith('image/')) {
+      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+      return;
+    }
+    // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Image = event.target?.result as string;
+      setimgprifile(base64Image); // เก็บข้อมูลรูปภาพเป็น Base64
+    };
+    
+    reader.readAsDataURL(file);
+  };
+  const handleImageUploadimgidcard = (files: FileList | null) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const file = files[0];
+    // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
+    if (!file.type.startsWith('image/')) {
+      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+      return;
+    }
+    // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Image = event.target?.result as string;
+      setimgidcard(base64Image); // เก็บข้อมูลรูปภาพเป็น Base64
+    };
+    reader.readAsDataURL(file);
+  };
+  const handleImageUploadimghouse = (files: FileList | null) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const file = files[0];
+    // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
+    if (!file.type.startsWith('image/')) {
+      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+      return;
+    }
+    // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Image = event.target?.result as string;
+      setimghouseregistration(base64Image); // เก็บข้อมูลรูปภาพเป็น Base64
+    };
+    reader.readAsDataURL(file);
+  };
+  const Uploadimgimgqualification = (files: FileList | null) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const file = files[0];
+    // ตรวจสอบประเภทของไฟล์ (รูปภาพเท่านั้น)
+    if (!file.type.startsWith('image/')) {
+      alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+      return;
+    }
+    // สร้างอ่านไฟล์รูปภาพและเก็บเป็น Base64
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Image = event.target?.result as string;
+      setimgqualification(base64Image); // เก็บข้อมูลรูปภาพเป็น Base64
+    };
+    reader.readAsDataURL(file);
+  };
+  
 
 
   return (
@@ -88,7 +222,6 @@ export default function Home() {
               <option>หนองไผ่</option>
             </select>
           </div>
-
           {/* <div className='mt-5'>
             <label className="text-white dark:text-gray-200" htmlFor="data">กศร.ตำบล</label>
             <input id="username" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
@@ -98,7 +231,6 @@ export default function Home() {
               <label className="text-white dark:text-gray-200" htmlFor="fname">ชื่อ</label>
               <input id="fname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div>
-
             <div>
               <label className="text-white dark:text-gray-200" htmlFor="lname">นามสกุล</label>
               <input id="lname" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
