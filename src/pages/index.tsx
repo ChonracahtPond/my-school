@@ -1,8 +1,4 @@
 import RootLayout from "@/components/layout";
-import Thesliderbar from '@/container/Home/Thesliderbar';
-import Activity from "@/container/Home/activity";
-import SliderNews from "@/container/Home/sliderNew";
-import Statistics from "@/container/Home/statistics";
 import Regfrom from "./register";
 
 
